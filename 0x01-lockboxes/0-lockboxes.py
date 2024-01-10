@@ -1,18 +1,20 @@
 #!/usr/bin/python3
 """
-Determines if all the boxes can be opened.
+Using a breadth-first search algorithm the canUnlockAll function checks
+whether it is possible to unlock all boxes in a set of interconnected boxes.
+
+  - Each box is numbered sequentially from 0 to n - 1.
+  - Each box may contain keys to the other boxes.
+  - A key with the same number as a box opens that box.
+  - We can assume all keys will be positive integers.
+  - There can be keys that do not have boxes.
+  - The first box boxes[0] is unlocked.
 """
 
 
 def canUnlockAll(boxes):
     """
-    Check if it's possible to unlock all boxes in a given set of boxes.
-    - Each box is numbered sequentially from 0 to n - 1.
-    - Each box may contain keys to the other boxes.
-    - A key with the same number as a box opens that box.
-    - We can assume all keys will be positive integers.
-    - There can be keys that do not have boxes.
-    - The first box boxes[0] is unlocked.
+    Checks if it's possible to unlock all boxes in a given set of boxes.
 
     Args:
       boxes (list of lists): A list of lists where each inner list
