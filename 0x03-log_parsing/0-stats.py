@@ -55,7 +55,7 @@ def parse_log() -> None:
 
             if line_count % 10 == 0:
                 print_metrics(status_code_counts, file_size)
-            print_metrics(status_code_counts, file_size)
+        print_metrics(status_code_counts, file_size)
 
     except KeyboardInterrupt:
         print_metrics(status_code_counts, file_size)
