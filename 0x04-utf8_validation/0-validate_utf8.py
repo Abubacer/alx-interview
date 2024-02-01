@@ -2,15 +2,9 @@
 """
 Determines if a given data set is a valid UTF-8 encoding.
 
-The function iterates over each byte in the data set and checks if it conforms
-to the UTF-8 encoding rules. It verifies whether each byte is a valid UTF-8
-character representation, ensuring that the data adheres to the UTF-8
-specification regarding byte order and format. Continuation bytes (10xxxxxx)
-are validated following the leading byte.
-
-If any byte violates the UTF-8 encoding rules, the function returns False.
-Otherwise, it returns True, indicating that the entire data set is a valid
-UTF-8 encoding.
+The function ensures that each byte in the data list follows the rules
+of UTF-8 encoding, including correct multi-byte character sequences.
+It returns True if all characters are properly encoded and False otherwise.
 """
 
 
@@ -25,22 +19,30 @@ def validUTF8(data):
             bool: True if the data set is a valid UTF-8 encoding
                   False otherwise.
     """
+    bytes_remaining = 0
     for byte in data:
-        # Check if the byte is in the format 10xxxxxx (continuation byte)
-        if byte & 0b11000000 == 0b10000000:
-            continue
-        # Count the number of leading set bits
-        leading_set_bits = 0
-        mask = 0b10000000
-        while byte & mask:
-            leading_set_bits += 1
-            mask >>= 1
-        # A character in UTF-8 can be 1 to 4 bytes long
-        if leading_set_bits == 1 or leading_set_bits > 4:
-            return False
-        # Check continuation bytes (10xxxxxx)
-        for _ in range(leading_set_bits - 1):
-            byte >>= 1
-            if byte & 0b10000000 == 0 or byte & 0b01000000:
+        # Keep only the 8 least significant bits
+        byte %= 256
+        if bytes_remaining == 0:
+            if byte >> 7 == 0b0:
+                # Single-byte character, move to the next byte
+                continue
+            # Two-byte character (110xxxxx 10xxxxxx)
+            if byte >> 5 == 0b110:
+                bytes_remaining = 1
+            # Three-byte character (1110xxxx 10xxxxxx 10xxxxxx)
+            elif byte >> 4 == 0b1110:
+                bytes_remaining = 2
+            # Four-byte character
+            elif byte >> 3 == 0b11110:
+                bytes_remaining = 3
+            else:
                 return False
-    return True
+        else:
+            # Check if the byte is a continuation byte
+            if byte >> 6 != 0b10:
+                return False
+            # Decrement the number of bytes remaining for the character
+            bytes_remaining -= 1
+
+    return bytes_remaining == 0
