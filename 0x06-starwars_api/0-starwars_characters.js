@@ -5,8 +5,8 @@
  * @param {string} movieId - The ID of the movie
  * @param {function} request - A function for making HTTP requests
  */
-const { argv } = require("process");
-const request = require("request");
+const { argv } = require('process');
+const request = require('request');
 
 const movieId = argv[2];
 // The Star Wars API + The first positional arg passed as the Movie ID
@@ -22,7 +22,7 @@ request(apiUrl, (error, movieData, body) => {
      * Gets the name of a Star Wars movie character
      * @param {number} idx - The index of the character in the list
      */
-    function getCharacterName(idx) {
+    function getCharacterName (idx) {
       if (idx < characters.length) {
         request(characters[idx], (error, characterData, body) => {
           if (error) {
