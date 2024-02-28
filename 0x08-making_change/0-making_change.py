@@ -24,22 +24,23 @@ def makeChange(coins, total):
              - If the total cannot be met by any number coins we have
              returns -1.
     """
-    # If total is 0 or less, return 0
+    if not coins or coins is None:
+        return -1
+
     if total <= 0:
         return 0
 
-    min_coins_needed = [float('inf')] * (total + 1)
-    min_coins_needed[0] = 0  # Base case: 0 coins needed to make total of 0
+    coins.sort(reverse=True)  # Sort coins in descending order
+    change = 0
 
     for coin in coins:
-        for j in range(coin, total + 1):
-            min_coins_needed[j] = min(
-                min_coins_needed[j],
-                min_coins_needed[j - coin] + 1
-                )
+        if coin <= 0:
+            return -1
 
-    # If total cannot be met by any number coins we have, return -1
-    if min_coins_needed[total] != float('inf'):
-        return min_coins_needed[total]
+        change += total // coin
+        total %= coin
+
+    if total == 0:
+        return change
     else:
         return -1
