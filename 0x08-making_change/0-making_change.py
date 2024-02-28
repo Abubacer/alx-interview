@@ -28,10 +28,14 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
+    coins.sort(reverse=True)
+
     min_coins_needed = [float('inf')] * (total + 1)
     min_coins_needed[0] = 0  # Base case: 0 coins needed to make total of 0
 
     for coin in coins:
+        if coin > total:  # Skip coins larger than the total
+            continue
         for j in range(coin, total + 1):
             min_coins_needed[j] = min(
                 min_coins_needed[j],
